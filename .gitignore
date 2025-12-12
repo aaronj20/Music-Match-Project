@@ -7,29 +7,18 @@ __pycache__/
 env/
 venv/
 ENV/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
+.venv
 
 # Django
 *.log
-local_settings.py
 db.sqlite3
 db.sqlite3-journal
 /media
 /staticfiles
+
+# Environment variables
+.env
+.env.local
 
 # IDE
 .vscode/
@@ -42,10 +31,13 @@ db.sqlite3-journal
 .DS_Store
 Thumbs.db
 
-# Environment
-.env
-.env.local
+# Google Cloud SDK (if installed locally)
+google-cloud-sdk/
 
 # Docker
-*.pid
+*.docker.tgz
 
+# Build artifacts
+*.pyc
+*.pyo
+*.pyd
