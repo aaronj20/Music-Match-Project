@@ -101,20 +101,33 @@
                 {% if playlists %}
                 <div class="list-group">
                     {% for playlist in playlists %}
-                    <div class="list-group-item">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">{{ playlist.name }}</h5>
-                            <span class="badge bg-primary">{{ playlist.song_count }} songs</span>
+                    <a href="{% url 'playlist_detail' playlist.id %}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-1">
+                                    <i class="bi bi-music-note-beamed"></i> {{ playlist.name }}
+                                </h5>
+                                {% if playlist.description %}
+                                <p class="mb-1">{{ playlist.description|truncatewords:15 }}</p>
+                                {% endif %}
+                                <small class="text-muted">
+                                    <i class="bi bi-person"></i> By {{ playlist.owner.username }}
+                                    • <i class="bi bi-clock"></i> {{ playlist.updated_at|timesince }} ago
+                                </small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-primary rounded-pill">{{ playlist.song_count }} songs</span>
+                            </div>
                         </div>
-                        {% if playlist.description %}
-                        <p class="mb-1">{{ playlist.description|truncatewords:15 }}</p>
-                        {% endif %}
-                        <small>By {{ playlist.owner.username }}</small>
-                    </div>
+                    </a>
                     {% endfor %}
                 </div>
                 {% else %}
-                <p class="text-muted">No playlists yet. Be the first to create one!</p>
+                <div class="text-center py-4">
+                    <i class="bi bi-music-note-list" style="font-size: 3rem; color: #ccc;"></i>
+                    <p class="text-muted mt-2">No playlists shared yet.</p>
+                    <p class="small text-muted">Create a playlist and share it with this community!</p>
+                </div>
                 {% endif %}
             </div>
         </div>
