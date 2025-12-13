@@ -41,3 +41,5 @@ google-cloud-sdk/
 *.pyc
 *.pyo
 *.pyd
+google-cloud-sdk/
+*.tar.gz
