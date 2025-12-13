@@ -31,6 +31,40 @@
     </div>
 </div>
 
+<!-- Share to Community -->
+{% if is_owner and user_communities %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5><i class="bi bi-share"></i> Share to Community</h5>
+            </div>
+            <div class="card-body">
+                {% if playlist.community %}
+                <div class="alert alert-success">
+                    <i class="bi bi-check-circle"></i> This playlist is shared with <strong>{{ playlist.community.name }}</strong>
+                </div>
+                {% else %}
+                <p class="text-muted mb-3">Share this playlist with one of your communities</p>
+                <form method="post" action="{% url 'share_playlist_to_community' playlist.id %}" class="d-flex gap-2">
+                    {% csrf_token %}
+                    <select name="community_id" class="form-select" required>
+                        <option value="">Select a community...</option>
+                        {% for community in user_communities %}
+                        <option value="{{ community.id }}">{{ community.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-info">
+                        <i class="bi bi-share"></i> Share
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <div class="row">
     <div class="col-12">
         <div class="card">

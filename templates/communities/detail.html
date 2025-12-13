@@ -120,31 +120,6 @@
         </div>
     </div>
 
-    <!-- Listening Parties -->
-    <div class="col-lg-6 mb-4">
-        <div class="card">
-            <div class="card-header bg-success text-white">
-                <h3><i class="bi bi-calendar-event"></i> Active Listening Parties</h3>
-            </div>
-            <div class="card-body">
-                {% if listening_parties %}
-                <div class="list-group">
-                    {% for party in listening_parties %}
-                    <div class="list-group-item">
-                        <h5 class="mb-1">{{ party.name }}</h5>
-                        {% if party.description %}
-                        <p class="mb-1">{{ party.description|truncatewords:15 }}</p>
-                        {% endif %}
-                        <small>Hosted by {{ party.host.username }} • Starts {{ party.start_time|date:"M d, H:i" }}</small>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <p class="text-muted">No active listening parties at the moment.</p>
-                {% endif %}
-            </div>
-        </div>
-    </div>
 </div>
 {% endblock %}
 

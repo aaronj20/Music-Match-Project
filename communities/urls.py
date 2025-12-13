@@ -9,7 +9,5 @@ urlpatterns = [
     path('community/<int:community_id>/leave/', views.leave_community_view, name='leave_community'),
     path('community/<int:community_id>/delete/', views.delete_community_view, name='delete_community'),
     path('community/<int:community_id>/message/', views.send_message_view, name='send_message'),
-    path('matches/', views.music_matches_view, name='music_matches'),
-    path('matches/calculate/<int:user_id>/', views.calculate_match_view, name='calculate_match'),
 ]
 

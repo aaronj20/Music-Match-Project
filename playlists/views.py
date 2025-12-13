@@ -39,19 +39,10 @@ def home_view(request):
     # Get user's playlists
     user_playlists = user.owned_playlists.all()[:5]
     
-    # Get upcoming listening parties
-    from communities.models import ListeningParty
-    from django.utils import timezone
-    upcoming_parties = ListeningParty.objects.filter(
-        community__in=user_communities,
-        start_time__gte=timezone.now()
-    ).order_by('start_time')[:5]
-    
     context = {
         'user_communities': user_communities,
         'recent_playlists': recent_playlists,
         'user_playlists': user_playlists,
-        'upcoming_parties': upcoming_parties,
     }
     return render(request, 'playlists/home.html', context)
 
@@ -134,11 +125,15 @@ def playlist_detail_view(request, playlist_id):
     is_owner = playlist.owner == request.user
     can_edit = is_owner or playlist.is_collaborative
     
+    # Get user's communities for sharing
+    user_communities = request.user.communities.all() if is_owner else []
+    
     context = {
         'playlist': playlist,
         'playlist_songs': playlist_songs,
         'is_owner': is_owner,
         'can_edit': can_edit,
+        'user_communities': user_communities,
     }
     return render(request, 'playlists/playlist_detail.html', context)
 
@@ -255,5 +250,42 @@ def remove_song_from_playlist(request, playlist_id, song_id):
         messages.success(request, f'Removed "{song.name}" from "{playlist.name}".')
     except PlaylistSong.DoesNotExist:
         messages.error(request, "Song not found in playlist.")
+    
+    return redirect('playlist_detail', playlist_id=playlist_id)
+
+
+@login_required
+def share_playlist_to_community(request, playlist_id):
+    """Share a playlist to a community"""
+    if request.method != 'POST':
+        return redirect('playlist_detail', playlist_id=playlist_id)
+    
+    playlist = get_object_or_404(Playlist, id=playlist_id)
+    
+    # Check if user is the owner
+    if playlist.owner != request.user:
+        messages.error(request, "Only the playlist owner can share it to communities.")
+        return redirect('playlist_detail', playlist_id=playlist_id)
+    
+    community_id = request.POST.get('community_id')
+    if not community_id:
+        messages.error(request, "Please select a community.")
+        return redirect('playlist_detail', playlist_id=playlist_id)
+    
+    try:
+        community = Community.objects.get(id=community_id)
+        
+        # Check if user is a member of the community
+        if request.user not in community.members.all():
+            messages.error(request, "You must be a member of this community to share to it.")
+            return redirect('playlist_detail', playlist_id=playlist_id)
+        
+        # Share the playlist to the community
+        playlist.community = community
+        playlist.save()
+        
+        messages.success(request, f'Playlist "{playlist.name}" shared to "{community.name}"!')
+    except Community.DoesNotExist:
+        messages.error(request, "Community not found.")
     
     return redirect('playlist_detail', playlist_id=playlist_id)
