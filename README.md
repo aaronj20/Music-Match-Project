@@ -23,3 +23,4 @@ A full-stack web application for social music discovery, community building, and
 - Joey Lu
 
 
+# Music-Match-Project
