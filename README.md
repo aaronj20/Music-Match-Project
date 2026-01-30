@@ -20,7 +20,7 @@ website: http://34.53.53.240
 
 ## Authors
 
--Aaron Joseph
+- Aaron Joseph
 - Joey Lu
 
 
