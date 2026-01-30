@@ -24,5 +24,3 @@ website: http://34.53.53.240
 - Aaron Joseph
 - Joey Lu
 
-
-# Music-Match-Project
